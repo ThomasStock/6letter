@@ -7,8 +7,6 @@ const start = Date.now();
 const logs: string[] = [];
 
 execute(data.split("\r\n"));
-// execute(["l", "i", "g", "h", "t", "ligh", "light", "li", "gh"]);
-// execute(["foo", "bar", "foobar", "barfoo", "other", "o", "fo"]);
 
 const end = Date.now();
 
@@ -20,9 +18,7 @@ function execute(words: string[]) {
   // Sort by length because a bigger word can't be a substring of a smaller word
   const sortedData = [...new Set(words)].sort((a, b) => b.length - a.length);
 
-  const maxLength = sortedData[0].length;
-
-  // Group by length
+  // Group by length to be able to exclude words that are too long
   const groupedData = sortedData.reduce((acc, word) => {
     if (!acc[word.length]) {
       acc[word.length] = [];
@@ -31,22 +27,11 @@ function execute(words: string[]) {
     return acc;
   }, {} as Record<number, string[]>);
 
-  // recursiveFind("light", []);
+  // Loop over each word
+  for (let j = 0; j < sortedData.length; j++) {
+    const word = sortedData[j];
 
-  // loop over each group of words with the same length
-  for (let i = maxLength; i > 1; i--) {
-    const words = groupedData[i];
-
-    if (!words) {
-      continue;
-    }
-
-    // Loop over each word
-    for (let j = 0; j < words.length; j++) {
-      const word = words[j];
-
-      recursiveFind(word, []);
-    }
+    recursiveFind(word, []);
   }
 
   function recursiveFind(word: string, result: string[] = []) {
@@ -59,7 +44,7 @@ function execute(words: string[]) {
       return;
     }
 
-    // Don't allow the word to match itself
+    // Don't allow result to match itself
     const maxLength = result.length ? remainingLength : remainingLength - 1;
 
     // Loop over each group of words
