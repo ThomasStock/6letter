@@ -10,13 +10,13 @@ execute(data.split("\r\n"));
 
 const end = Date.now();
 
-console.log(logs);
+// console.log(logs);
 
 console.log("done in", end - start, "ms", "with", logs.length, "results");
 
 function execute(words: string[], length = 6) {
   // Remove duplicates and sort by length because a bigger word can't be a substring of a smaller word
-  const sortedData = [...new Set(words)].sort((a, b) => b.length - a.length);
+  const sortedData = [...new Set(words)];
 
   // Group by length to be able to exclude words that are too long while searching
   const groupedData = sortedData.reduce((acc, word) => {
@@ -28,16 +28,14 @@ function execute(words: string[], length = 6) {
   }, {} as Record<number, string[]>);
 
   // Loop over each word in the desired length
-  for (let j = 0; j < groupedData[length].length; j++) {
-    const word = sortedData[j];
-
+  for (let word of groupedData[length]) {
     recursiveFind(word, []);
   }
 
-  // Example: recursiveFind("foobar", ["fo","ob"])
+  // Example to follow along: recursiveFind("foobar", ["fo","ob"])
   function recursiveFind(word: string, result: string[] = []) {
     const guessedLength = result.join("").length; // fo+ob = 4
-    const remainingLength = word.length - guessedLength; // 6 - 4 = 2
+    const remainingLength = word.length - guessedLength; // "foobar".length - 4 = 2
     const remainingWord = word.slice(guessedLength); // "ar"
 
     if (remainingLength === 0) {
@@ -49,16 +47,13 @@ function execute(words: string[], length = 6) {
     const maxLength = result.length ? remainingLength : remainingLength - 1;
 
     // Loop over words with 2,1 letters
-    for (let k = maxLength; k > 0; k--) {
+    for (let n = maxLength; n > 0; n--) {
       // Example: words with 1 letter like ["a", "b", "c"]
-      const smallerWords = groupedData[k];
-      const wordCount = smallerWords?.length ?? 0;
+      const wordsWithNLetters = groupedData[n] ?? [];
 
-      for (let l = 0; l < wordCount; l++) {
+      for (let smallerWord of wordsWithNLetters) {
         // Example: "a"
-        const smallerWord = smallerWords[l];
-
-        if (remainingWord.indexOf(smallerWord) === 0) {
+        if (remainingWord.startsWith(smallerWord)) {
           // recursiveFind("foobar", ["fo","ob", "a"])
           recursiveFind(word, [...result, smallerWord]);
         }
