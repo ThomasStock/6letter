@@ -14,7 +14,7 @@ console.log(logs);
 
 console.log("done in", end - start, "ms", "with", logs.length, "results");
 
-function execute(words: string[]) {
+function execute(words: string[], length = 6) {
   // Sort by length because a bigger word can't be a substring of a smaller word
   const sortedData = [...new Set(words)].sort((a, b) => b.length - a.length);
 
@@ -28,7 +28,7 @@ function execute(words: string[]) {
   }, {} as Record<number, string[]>);
 
   // Loop over each word
-  for (let j = 0; j < sortedData.length; j++) {
+  for (let j = 0; j < groupedData[length].length; j++) {
     const word = sortedData[j];
 
     recursiveFind(word, []);
