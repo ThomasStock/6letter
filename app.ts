@@ -4,18 +4,17 @@ const data = fs.readFileSync("input.txt", "utf8");
 
 const start = Date.now();
 
-const logs: string[] = [];
+const results: string[] = [];
 
 execute(data.split("\r\n"));
 
 const end = Date.now();
 
-// console.log(logs);
-
-console.log("done in", end - start, "ms", "with", logs.length, "results");
+console.log(results);
+console.log("done in", end - start, "ms", "with", results.length, "results");
 
 function execute(words: string[], length = 6) {
-  // Remove duplicates and sort by length because a bigger word can't be a substring of a smaller word
+  // Remove duplicates
   const sortedData = [...new Set(words)];
 
   // Group by length to be able to exclude words that are too long while searching
@@ -39,7 +38,7 @@ function execute(words: string[], length = 6) {
     const remainingWord = word.slice(guessedLength); // "ar"
 
     if (remainingLength === 0) {
-      logs.push(`${word}=${result.join("+")}`);
+      results.push(`${word}=${result.join("+")}`);
       return;
     }
 
