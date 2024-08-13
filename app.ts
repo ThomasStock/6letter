@@ -51,7 +51,7 @@ function execute(words: string[], length = 6) {
       const wordsWithNLetters = groupedData[n] ?? [];
 
       for (let smallerWord of wordsWithNLetters) {
-        // Example: "a"
+        // Example: "ar" starts with "a" so we have a match
         if (remainingWord.startsWith(smallerWord)) {
           // recursiveFind("foobar", ["fo","ob", "a"])
           recursiveFind(word, [...result, smallerWord]);
